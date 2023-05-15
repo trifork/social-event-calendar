@@ -26,5 +26,6 @@ export const filterByUpcomingPredicate =
   (months: number) =>
   (event: CalendarEvent): boolean => {
     const weekAgo = subWeeks(new Date(), 1);
-    return differenceInMonths(event.start, weekAgo) <= months;
+    const diff = differenceInMonths(event.start, weekAgo);
+    return diff > 0 && diff <= months;
   };
