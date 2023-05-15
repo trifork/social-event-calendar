@@ -39,3 +39,10 @@ npm run deploy
 You can run `flyctl info` to get the url and ip address of your server.
 
 Check out the [fly docs](https://fly.io/docs/getting-started/node/) for more information.
+
+## Environment variables
+
+These environment variables needs to be set on the deployment or when running locally. Running locally you can set them by adding a .env file in the root of the project.
+
+- `PUBLIC_ICS_CALENDAR` - (Required) The link to a public ics calendar to show activities from
+- `CALENDAR_CACHE_TIME_MIN` - (Optional) The number of minutes to cache the calendar for. Defaults to 30 minutes.
