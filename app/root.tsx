@@ -11,6 +11,12 @@ import {
 
 import tailwind from "./tailwind.css";
 
+export const meta = () => [
+  {
+    title: "Eventkalender Trifork",
+  },
+];
+
 export const links: LinksFunction = () => {
   const cssBundle = cssBundleHref
     ? [{ rel: "stylesheet", href: cssBundleHref }]

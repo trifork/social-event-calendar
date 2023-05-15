@@ -7,8 +7,9 @@ interface Props {
   title: string;
   subtitle: string;
   data: CalendarEvent[];
+  calendarLink: string;
 }
-export const Calendar = ({ title, subtitle, data }: Props) => (
+export const Calendar = ({ title, subtitle, data, calendarLink }: Props) => (
   <main className="p-4 md:px-16 md:py-10 bg-primary-100">
     <table className="w-full text-neutral-800 break-inside-avoid-page">
       <Header title={title} subtitle={subtitle} />
@@ -17,7 +18,7 @@ export const Calendar = ({ title, subtitle, data }: Props) => (
           <CalendarEventRow key={event.id} event={event} />
         ))}
       </tbody>
-      <Footer />
+      <Footer calendarLink={calendarLink} />
     </table>
   </main>
 );
@@ -45,12 +46,12 @@ const Header = ({ title, subtitle }: Pick<Props, "title" | "subtitle">) => (
   </thead>
 );
 
-const Footer = () => (
+const Footer = ({ calendarLink }: { calendarLink: string }) => (
   <tfoot>
     <tr>
       <td colSpan={999} className="relative">
         <div className="flex mt-5 shrink-0">
-          <QRCode />
+          <QRCode value={calendarLink} />
           <p className="ml-2 text-lg self-end">
             Scan og få kalender opdateringer
           </p>

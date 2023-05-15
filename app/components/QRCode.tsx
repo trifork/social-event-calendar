@@ -1,12 +1,8 @@
 import { QRCodeSVG } from "qrcode.react";
 
-export const QRCode = () => {
-  return (
-    <QRCodeSVG
-      value="blablabla"
-      width={100}
-      height={100}
-      bgColor="transparent"
-    />
-  );
-};
+interface Props {
+  value: string;
+}
+export const QRCode = ({ value }: Props) => (
+  <QRCodeSVG value={value} width={100} height={100} bgColor="transparent" />
+);

@@ -6,6 +6,7 @@ import {
   filterByQuarterPredicate,
   filterByYearPredicate,
 } from "~/services/calendar-filtering";
+import { getICSCalendarLink } from "~/services/calendar-ics-link";
 import { getCalendarEvents } from "~/services/calendar-parser";
 
 export const loader = async ({ params, request }: LoaderArgs) => {
@@ -26,9 +27,17 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     title: `Sociale Events i Q${quarter}`,
     subtitle: `Eventkalender ${year}`,
     events: filtered,
+    link: getICSCalendarLink(),
   });
 };
 export default function QuarterlyCalendar() {
-  const { events, title, subtitle } = useLoaderData<typeof loader>();
-  return <Calendar data={events} title={title} subtitle={subtitle} />;
+  const { events, title, subtitle, link } = useLoaderData<typeof loader>();
+  return (
+    <Calendar
+      data={events}
+      title={title}
+      subtitle={subtitle}
+      calendarLink={link}
+    />
+  );
 }

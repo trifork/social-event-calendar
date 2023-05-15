@@ -1,3 +1,5 @@
+import { differenceInMinutes } from "date-fns";
+
 export const getICSCalendarLink = () => {
   const link = process.env.PUBLIC_ICS_CALENDAR;
   if (!link) {
@@ -5,8 +7,31 @@ export const getICSCalendarLink = () => {
   }
   return link;
 };
+export const getCacheTime = () => {
+  const fallbackTo30Min = 30 * 60;
+  const time = Number(process.env.CALENDAR_CACHE_TIME_MIN) || fallbackTo30Min;
+  return time;
+};
+
+let cachedCalendar: { data: Promise<string>; lastFetchedAt: Date } | null =
+  null;
+
+const isCacheValid = () =>
+  cachedCalendar === null ||
+  differenceInMinutes(cachedCalendar.lastFetchedAt, new Date()) <
+    getCacheTime();
 
 export const fetchCalendar = async () => {
+  if (cachedCalendar && isCacheValid()) {
+    return cachedCalendar.data;
+  }
+
+  const data = fetchCalendarFromLink();
+  cachedCalendar = { data, lastFetchedAt: new Date() };
+  return await data;
+};
+
+const fetchCalendarFromLink = async () => {
   const link = getICSCalendarLink();
   const response = await fetch(link);
   if (!response.ok) {

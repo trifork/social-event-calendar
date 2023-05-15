@@ -1,38 +1,49 @@
-import type { V2_MetaFunction } from "@remix-run/node";
+import type { HeadersFunction, LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { Calendar } from "~/components/Calendar";
+import {
+  filterByUpcomingPredicate,
+  filterByYearPredicate,
+} from "~/services/calendar-filtering";
+import { getCacheTime, getICSCalendarLink } from "~/services/calendar-ics-link";
+import { getCalendarEvents } from "~/services/calendar-parser";
 
-export const meta: V2_MetaFunction = () => {
-  return [{ title: "New Remix App" }];
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  const cacheControl = loaderHeaders.get("Cache-Control") ?? "";
+
+  return { "Cache-Control": cacheControl };
 };
 
-export default function Index() {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const events = await getCalendarEvents();
+  const url = new URL(request.url);
+  const year = Number(url.searchParams.get("year")) || new Date().getFullYear();
+  const months = Number(url.searchParams.get("upcomming")) || 3;
+  const title = url.searchParams.get("title") || "Sociale Events";
+
+  const filtered = events
+    .filter(filterByYearPredicate(year))
+    .filter(filterByUpcomingPredicate(months));
+
+  return json(
+    {
+      title,
+      subtitle: `Eventkalender næste ${months} mdr.`,
+      events: filtered,
+      link: getICSCalendarLink(),
+    },
+    { headers: { "Cache-Control": `public, max-age=${getCacheTime()}` } }
+  );
+};
+export default function YearlyCalendar() {
+  const { events, title, subtitle, link } = useLoaderData<typeof loader>();
   return (
-    <div style={{ lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <Calendar
+      data={events}
+      title={title}
+      subtitle={subtitle}
+      calendarLink={link}
+    />
   );
 }

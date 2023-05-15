@@ -1,4 +1,10 @@
-import { differenceInMonths, getMonth, getQuarter, getYear } from "date-fns";
+import {
+  differenceInMonths,
+  getMonth,
+  getQuarter,
+  getYear,
+  subWeeks,
+} from "date-fns";
 import type { CalendarEvent } from "./calendar-parser";
 
 export const filterByYearPredicate =
@@ -17,6 +23,8 @@ export const filterByQuarterPredicate =
     getQuarter(event.start) === quarter;
 
 export const filterByUpcomingPredicate =
-  () =>
-  (event: CalendarEvent): boolean =>
-    differenceInMonths(event.start, new Date()) <= 3;
+  (months: number) =>
+  (event: CalendarEvent): boolean => {
+    const weekAgo = subWeeks(new Date(), 1);
+    return differenceInMonths(event.start, weekAgo) <= months;
+  };
