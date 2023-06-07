@@ -3,10 +3,11 @@
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
-    "deploy": "fly deploy --remote-only",
     "dev": "remix dev",
     "start": "remix-serve build",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "test": "vitest"
   },
   "dependencies": {
     "@remix-run/css-bundle": "^1.16.0",
@@ -24,12 +25,20 @@
   "devDependencies": {
     "@remix-run/dev": "^1.16.0",
     "@remix-run/eslint-config": "^1.16.0",
+    "@testing-library/dom": "^9.3.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/ical": "^0.8.0",
     "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^4.0.0",
     "eslint": "^8.38.0",
+    "happy-dom": "^9.20.3",
     "tailwindcss": "^3.3.2",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.32.0"
   },
   "engines": {
     "node": ">=14"

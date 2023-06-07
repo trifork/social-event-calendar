@@ -27,5 +27,8 @@ export const filterByUpcomingPredicate =
   (event: CalendarEvent): boolean => {
     const weekAgo = subWeeks(new Date(), 1);
     const diff = differenceInMonths(event.start, weekAgo);
-    return diff > 0 && diff <= months;
+    if (event.title.includes("Vinsmagning")) {
+      console.log({ diff, event });
+    }
+    return diff >= 0 && diff <= months;
   };
