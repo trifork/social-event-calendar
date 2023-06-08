@@ -18,7 +18,8 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
 export const loader = async ({ params, request }: LoaderArgs) => {
   const events = await getCalendarEvents();
   const url = new URL(request.url);
-  const year = Number(url.searchParams.get("year")) || new Date().getFullYear();
+  const year =
+    Number(url.searchParams.get("year")) || new Date(Date.now()).getFullYear();
   const months = Number(url.searchParams.get("upcomming")) || 3;
   const title = url.searchParams.get("title") || "Sociale Events";
 

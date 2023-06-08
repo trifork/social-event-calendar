@@ -18,7 +18,7 @@ let cachedCalendar: { data: Promise<string>; lastFetchedAt: Date } | null =
 
 const isCacheValid = () =>
   cachedCalendar === null ||
-  differenceInMinutes(cachedCalendar.lastFetchedAt, new Date()) <
+  differenceInMinutes(cachedCalendar.lastFetchedAt, Date.now()) <
     getCacheTime();
 
 export const fetchCalendar = async () => {
@@ -27,7 +27,7 @@ export const fetchCalendar = async () => {
   }
 
   const data = fetchCalendarFromLink();
-  cachedCalendar = { data, lastFetchedAt: new Date() };
+  cachedCalendar = { data, lastFetchedAt: new Date(Date.now()) };
   return await data;
 };
 

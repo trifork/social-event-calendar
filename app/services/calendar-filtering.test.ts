@@ -14,28 +14,26 @@ describe("Calendar Filtering", () => {
       months | eventStart      | expectedIncluded | reason
       ${1}   | ${"2021-01-01"} | ${true}          | ${"event starts in the same month"}
       ${1}   | ${"2021-01-31"} | ${true}          | ${"event starts in the same month"}
-      ${1}   | ${"2021-02-01"} | ${false}         | ${"event starts in the next month"}
-      ${1}   | ${"2021-02-28"} | ${false}         | ${"event starts in the next month"}
+      ${1}   | ${"2021-02-02"} | ${false}         | ${"event starts in more than 1 month"}
+      ${1}   | ${"2021-02-28"} | ${false}         | ${"event starts in more than 1 month"}
       ${3}   | ${"2021-01-01"} | ${true}          | ${"event starts within 3 months"}
       ${3}   | ${"2021-03-30"} | ${true}          | ${"event starts within 3 months"}
       ${3}   | ${"2021-04-01"} | ${false}         | ${"event does not start within 3 months"}
-      ${3}   | ${"2020-12-25"} | ${true}          | ${"include events one week ago"}
-      ${3}   | ${"2020-12-24"} | ${false}         | ${"includes events one week ago, but this is 8 days ago"}
+      ${3}   | ${"2020-12-29"} | ${true}          | ${"include events 3 days ago"}
+      ${3}   | ${"2020-12-28"} | ${false}         | ${"includes events 3 days ago, but this is 4 days ago"}
     `(
       "should return $expectedIncluded when filtering upcomming $months months and event starts on $eventStart, beacause $reason",
       ({ months, eventStart, expectedIncluded }) => {
         vi.setSystemTime(new Date("2021-01-01"));
         const event: CalendarEvent = {
           start: new Date(eventStart).getTime(),
-          end: new Date(eventStart + 1000).getTime(),
+          end: new Date(eventStart).getTime() + 1000,
           title: "Test event",
           id: "id",
         };
-        const filter = filterByUpcomingPredicate(months);
+        const filter = filterByUpcomingPredicate(Number(months));
         expect(filter(event)).toBe(expectedIncluded);
       }
     );
-
-    it.todo("should remove events starting in more than 3 months");
   });
 });

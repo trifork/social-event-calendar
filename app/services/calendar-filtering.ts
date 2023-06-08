@@ -1,10 +1,4 @@
-import {
-  differenceInMonths,
-  getMonth,
-  getQuarter,
-  getYear,
-  subWeeks,
-} from "date-fns";
+import { addMonths, getMonth, getQuarter, getYear, subDays } from "date-fns";
 import type { CalendarEvent } from "./calendar-parser";
 
 export const filterByYearPredicate =
@@ -25,10 +19,14 @@ export const filterByQuarterPredicate =
 export const filterByUpcomingPredicate =
   (months: number) =>
   (event: CalendarEvent): boolean => {
-    const weekAgo = subWeeks(new Date(), 1);
-    const diff = differenceInMonths(event.start, weekAgo);
-    if (event.title.includes("Vinsmagning")) {
-      console.log({ diff, event });
+    const includeFrom = subDays(Date.now(), 3).getTime();
+
+    if (event.start < includeFrom) {
+      return false;
     }
-    return diff >= 0 && diff <= months;
+    const includeTo = addMonths(Date.now(), months).getTime();
+    if (event.start > includeTo) {
+      return false;
+    }
+    return true;
   };
