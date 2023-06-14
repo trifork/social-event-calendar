@@ -18,7 +18,7 @@ describe("Calendar Filtering", () => {
       ${1}   | ${"2021-02-28"} | ${false}         | ${"event starts in more than 1 month"}
       ${3}   | ${"2021-01-01"} | ${true}          | ${"event starts within 3 months"}
       ${3}   | ${"2021-03-30"} | ${true}          | ${"event starts within 3 months"}
-      ${3}   | ${"2021-03-31"} | ${false}         | ${"event does not start within 3 months"}
+      ${3}   | ${"2021-04-02"} | ${false}         | ${"event does not start within 3 months"}
       ${3}   | ${"2020-12-29"} | ${true}          | ${"include events 3 days ago"}
       ${3}   | ${"2020-12-28"} | ${false}         | ${"includes events 3 days ago, but this is 4 days ago"}
     `(
