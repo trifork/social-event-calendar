@@ -1,4 +1,4 @@
-import type { HeadersFunction, LoaderArgs } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Calendar } from "~/components/Calendar";
@@ -12,7 +12,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return { "Cache-Control": cacheControl };
 };
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const events = await getCalendarEvents();
   const url = new URL(request.url);
 
