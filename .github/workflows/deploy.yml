@@ -89,6 +89,13 @@ jobs:
           file: "fly.toml"
           field: "app"
 
+      - name: 👨‍⚕️ Validate Fly Connection
+        uses: superfly/flyctl-actions@1.4
+        with:
+          args: "doctor"
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
       - name: 🚀 Deploy Staging
         if: ${{ github.ref == 'refs/heads/dev' }}
         uses: superfly/flyctl-actions@1.4
