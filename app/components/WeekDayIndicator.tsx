@@ -38,13 +38,13 @@ const Weekdays = ({ event, week }: Props & { week: Date }) => {
   return (
     <>
       {daysInWeek.map((day) => (
-        <Weekday event={event} day={day} key={day.getTime()} />
+        <Weekday event={event} day={day.getTime()} key={day.getTime()} />
       ))}
     </>
   );
 };
 
-const Weekday = ({ event, day }: Props & { day: Date }) => {
+const Weekday = ({ event, day }: Props & { day: number }) => {
   const isEventHappiningOnThisDay = areIntervalsOverlapping(
     { start: startOfDay(day), end: endOfDay(day) },
     event
