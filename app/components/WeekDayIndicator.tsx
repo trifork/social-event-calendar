@@ -31,8 +31,8 @@ export const WeekDayIndicator = ({ event }: Props) => {
 
 const Weekdays = ({ event, week }: Props & { week: Date }) => {
   const daysInWeek = eachDayOfInterval({
-    start: startOfWeek(week, weekOptions),
-    end: endOfWeek(week, weekOptions),
+    start: startOfWeek(week, weekOptions).getTime(),
+    end: endOfWeek(week, weekOptions).getTime(),
   });
 
   return (
@@ -46,7 +46,7 @@ const Weekdays = ({ event, week }: Props & { week: Date }) => {
 
 const Weekday = ({ event, day }: Props & { day: number }) => {
   const isEventHappiningOnThisDay = areIntervalsOverlapping(
-    { start: startOfDay(day), end: endOfDay(day) },
+    { start: startOfDay(day).getTime(), end: endOfDay(day).getTime() },
     event
   );
 
