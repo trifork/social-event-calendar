@@ -61,11 +61,9 @@ const Footer = ({ calendarLink }: { calendarLink: string }) => (
       <td colSpan={999} className="relative">
         <div className="flex mt-5 shrink-0">
           <QRCode value={calendarLink} />
-          <p className="ml-2 text-lg self-end">
-            Scan og få kalender opdateringer
-          </p>
+          <p className="ml-2 text-lg">Scan og få kalender opdateringer</p>
         </div>
-        <Logo className="absolute right-1 bottom-1 h-4" />
+        <Logo className="absolute right-1 bottom-1" />
       </td>
     </tr>
   </tfoot>
