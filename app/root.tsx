@@ -7,6 +7,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useMatches,
 } from "@remix-run/react";
 
 import tailwind from "./tailwind.css";
@@ -38,6 +39,13 @@ export const links: LinksFunction = () => {
 };
 
 export default function App() {
+  const matches = useMatches();
+
+  // If at least one route wants to hydrate, this will return true
+  // Add this to any route that needs to hydrate: export const handle = { hydrate: true };
+  const includeScripts = matches.some(
+    (match) => (match.handle as any)?.hydrate === true
+  );
   return (
     <html lang="en">
       <head>
@@ -49,7 +57,7 @@ export default function App() {
       <body>
         <Outlet />
         <ScrollRestoration />
-        <Scripts />
+        {includeScripts ? <Scripts /> : null}
         <LiveReload />
       </body>
     </html>
