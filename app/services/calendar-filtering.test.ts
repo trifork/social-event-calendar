@@ -9,7 +9,7 @@ describe("Calendar Filtering", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
-  describe("Upcomming", () => {
+  describe("Upcoming", () => {
     test.each`
       months | eventStart      | expectedIncluded | reason
       ${1}   | ${"2021-01-01"} | ${true}          | ${"event starts in the same month"}
@@ -22,7 +22,7 @@ describe("Calendar Filtering", () => {
       ${3}   | ${"2020-12-29"} | ${true}          | ${"include events 3 days ago"}
       ${3}   | ${"2020-12-28"} | ${false}         | ${"includes events 3 days ago, but this is 4 days ago"}
     `(
-      "should return $expectedIncluded when filtering upcomming $months months and event starts on $eventStart, beacause $reason",
+      "should return $expectedIncluded when filtering upcoming $months months and event starts on $eventStart, beacause $reason",
       ({ months, eventStart, expectedIncluded }) => {
         vi.setSystemTime(new Date("2021-01-01"));
         const event: CalendarEvent = {

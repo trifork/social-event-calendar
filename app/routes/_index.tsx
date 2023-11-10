@@ -1,11 +1,8 @@
-import type { HeadersFunction, LoaderArgs } from "@remix-run/node";
+import type { HeadersFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Calendar } from "~/components/Calendar";
-import {
-  filterByUpcomingPredicate,
-  filterByYearPredicate,
-} from "~/services/calendar-filtering";
+import { filterByUpcomingPredicate } from "~/services/calendar-filtering";
 import { getCacheTime, getICSCalendarLink } from "~/services/calendar-ics-link";
 import { getCalendarEvents } from "~/services/calendar-parser";
 
@@ -15,29 +12,26 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return { "Cache-Control": cacheControl };
 };
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const events = await getCalendarEvents();
   const url = new URL(request.url);
-  const year =
-    Number(url.searchParams.get("year")) || new Date(Date.now()).getFullYear();
-  const months = Number(url.searchParams.get("upcomming")) || 3;
+
+  const upcomingMonths = Number(url.searchParams.get("upcoming")) || 3;
   const title = url.searchParams.get("title") || "Sociale Events";
 
-  const filtered = events
-    .filter(filterByYearPredicate(year))
-    .filter(filterByUpcomingPredicate(months));
+  const filtered = events.filter(filterByUpcomingPredicate(upcomingMonths));
 
   return json(
     {
       title,
-      subtitle: `Eventkalender næste ${months} mdr.`,
+      subtitle: `Eventkalender næste ${upcomingMonths} mdr.`,
       events: filtered,
       link: getICSCalendarLink(),
     },
     { headers: { "Cache-Control": `public, max-age=${getCacheTime()}` } }
   );
 };
-export default function YearlyCalendar() {
+export default function DefaultCalendar() {
   const { events, title, subtitle, link } = useLoaderData<typeof loader>();
   return (
     <Calendar

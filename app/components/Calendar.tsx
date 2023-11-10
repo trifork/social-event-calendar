@@ -12,6 +12,15 @@ interface Props {
 export const Calendar = ({ title, subtitle, data, calendarLink }: Props) => (
   <main className="p-4 md:px-16 md:py-10 bg-primary-100">
     <table className="w-full text-neutral-800 break-inside-avoid-page">
+      {data.length === 0 ? (
+        <tbody>
+          <tr>
+            <td colSpan={999} className="text-center py-10">
+              <p className="text-2xl">Ingen events i den valgte periode</p>
+            </td>
+          </tr>
+        </tbody>
+      ) : null}
       <Header title={title} subtitle={subtitle} />
       <tbody>
         {data.map((event) => (

@@ -1,6 +1,7 @@
-import { differenceInMinutes } from "date-fns";
-
 export const getICSCalendarLink = () => {
+  // We could support multiple calendars by checking the url and finding a "name", e.g. "AAL"
+  // and look for a PUBLIC_ICS_CALENDAR_AAL environment variable. That way we could support
+  // many different trifork offices deployed from the same codebase.
   const link = process.env.PUBLIC_ICS_CALENDAR;
   if (!link) {
     throw new Error("Missing PUBLIC_ICS_CALENDAR environment variable");
@@ -13,22 +14,8 @@ export const getCacheTime = () => {
   return time;
 };
 
-let cachedCalendar: { data: Promise<string>; lastFetchedAt: Date } | null =
-  null;
-
-const isCacheValid = () =>
-  cachedCalendar === null ||
-  differenceInMinutes(cachedCalendar.lastFetchedAt, Date.now()) <
-    getCacheTime();
-
 export const fetchCalendar = async () => {
-  if (cachedCalendar && isCacheValid()) {
-    return cachedCalendar.data;
-  }
-
-  const data = fetchCalendarFromLink();
-  cachedCalendar = { data, lastFetchedAt: new Date(Date.now()) };
-  return await data;
+  return fetchCalendarFromLink();
 };
 
 const fetchCalendarFromLink = async () => {

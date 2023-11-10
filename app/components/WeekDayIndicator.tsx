@@ -9,7 +9,7 @@ import {
   startOfWeek,
 } from "date-fns";
 import type { CalendarEvent } from "~/services/calendar-parser";
-import { formatWeekday } from "~/services/date-formatters";
+import { dateFnsOptions, formatWeekday } from "~/services/date-formatters";
 
 interface Props {
   event: CalendarEvent;
@@ -19,7 +19,7 @@ export const WeekDayIndicator = ({ event }: Props) => {
     <>
       {eachWeekOfInterval(
         { start: event.start, end: event.end },
-        weekOptions
+        dateFnsOptions
       ).map((week) => (
         <div key={week.getTime()} className="flex flex-row justify-center">
           <Weekdays week={week} event={event} />
@@ -31,22 +31,22 @@ export const WeekDayIndicator = ({ event }: Props) => {
 
 const Weekdays = ({ event, week }: Props & { week: Date }) => {
   const daysInWeek = eachDayOfInterval({
-    start: startOfWeek(week, weekOptions),
-    end: endOfWeek(week, weekOptions),
+    start: startOfWeek(week, dateFnsOptions).getTime(),
+    end: endOfWeek(week, dateFnsOptions).getTime(),
   });
 
   return (
     <>
       {daysInWeek.map((day) => (
-        <Weekday event={event} day={day} key={day.getTime()} />
+        <Weekday event={event} day={day.getTime()} key={day.getTime()} />
       ))}
     </>
   );
 };
 
-const Weekday = ({ event, day }: Props & { day: Date }) => {
+const Weekday = ({ event, day }: Props & { day: number }) => {
   const isEventHappiningOnThisDay = areIntervalsOverlapping(
-    { start: startOfDay(day), end: endOfDay(day) },
+    { start: startOfDay(day).getTime(), end: endOfDay(day).getTime() },
     event
   );
 
@@ -63,5 +63,3 @@ const Weekday = ({ event, day }: Props & { day: Date }) => {
     </span>
   );
 };
-
-const weekOptions = { weekStartsOn: 1 } as const;
