@@ -5,7 +5,7 @@ interface Props {
 }
 export const Logo = ({ className }: Props) => (
   <svg
-    className={clsx("h-4 w-fit", className)}
+    className={clsx("h-4 w-auto", className)}
     height="52"
     viewBox="0 0 495 52"
     width="495"

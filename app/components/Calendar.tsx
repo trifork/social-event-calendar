@@ -27,6 +27,7 @@ export const Calendar = ({ title, subtitle, data, calendarLink }: Props) => (
           <CalendarEventRow key={event.id} event={event} />
         ))}
       </tbody>
+      {/* TODO: When printing, and there aren't enough events to fill the page, then add some whitespace here to push footer to bottom of page. We can use "print:" to apply tailwind styles only when printing */}
       <Footer calendarLink={calendarLink} />
     </table>
   </main>
